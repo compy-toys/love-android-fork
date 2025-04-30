@@ -13,7 +13,7 @@ android {
         minSdk 18
         compileSdk 34
         targetSdk 34
-        
+
         def getAppName = {
             def nameArray = project.properties["app.name_byte_array"]
             def name = project.properties["app.name"]
@@ -44,19 +44,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    flavorDimensions = ['mode', 'recording']
+    flavorDimensions = ['mode']
     productFlavors {
         normal {
             dimension 'mode'
         }
         embed {
             dimension 'mode'
-        }
-        record {
-            dimension 'recording'
-        }
-        noRecord {
-            dimension 'recording'
         }
     }
     lint {
