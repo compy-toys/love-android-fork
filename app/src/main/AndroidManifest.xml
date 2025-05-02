@@ -28,7 +28,7 @@
     android:usesCleartextTraffic="true"
   >
     <activity
-      android:name="org.love2d.android.GameActivity"
+      android:name="org.love2d.android.CompyActivity"
       android:exported="true"
       android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|navigation"
       android:label="${appName}"
