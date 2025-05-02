@@ -14,27 +14,7 @@ android {
         compileSdk 34
         targetSdk 34
 
-        def getAppName = {
-            def nameArray = project.properties["app.name_byte_array"]
-            def name = project.properties["app.name"]
-            if (name != null && nameArray != null) {
-                throw new Exception("Only define either `app.name` or `app.name_byte_array` in gradle.properties, but not both!")
-            }
-
-            if (name == null) {
-                def nameArraySplit = nameArray.split(",")
-                def nameBytes = new byte[nameArraySplit.length]
-                def count = 0
-                for (String s: nameArraySplit) {
-                    nameBytes[count++] = (byte) Integer.parseInt(s)
-                }
-                return new String(nameBytes, StandardCharsets.UTF_8)
-            }
-            return name
-        }
-
         manifestPlaceholders = [
-            NAME:getAppName(),
             ORIENTATION:project.properties["app.orientation"],
         ]
     }
@@ -44,10 +24,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    flavorDimensions = ['mode']
+    flavorDimensions = ['mode', 'compy']
     productFlavors {
-        normal {
-            dimension 'mode'
+        IDE {
+            dimension 'compy'
+            applicationIdSuffix ".ide"
+            manifestPlaceholders = [appName: "Compy IDE"]
+        }
+        player {
+            dimension 'compy'
+            applicationIdSuffix ".player"
+            manifestPlaceholders = [appName: "Compy Player"]
         }
         embed {
             dimension 'mode'
