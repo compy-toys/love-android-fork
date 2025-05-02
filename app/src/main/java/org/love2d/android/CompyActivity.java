@@ -80,6 +80,14 @@ public class CompyActivity extends GameActivity {
         }
       }
     }
+
+    if (flavor == Flavor.PLAYER) {
+      if (projectPath.isEmpty()) {
+        Log.d("CompyActivity", "No project selected, launching Selector intent");
+        Intent selectIntent = new Intent(this, ProjectSelector.class);
+        startActivity(selectIntent);
+      }
+    }
   }
 
   @Override
