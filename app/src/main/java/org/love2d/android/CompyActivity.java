@@ -91,6 +91,14 @@ public class CompyActivity extends GameActivity {
   }
 
   @Override
+  protected void onDestroy() {
+    if (isPlayer) {
+      projectPath = "";
+    }
+    super.onDestroy();
+  }
+
+  @Override
   protected void onNewIntent(Intent intent) {
       Log.d("CompyActivity", "onNewIntent() with " + intent);
       handleIntent(intent);
