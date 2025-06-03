@@ -100,57 +100,59 @@ public class CompyActivity extends GameActivity {
 
   @Override
   protected void onNewIntent(Intent intent) {
-      Log.d("CompyActivity", "onNewIntent() with " + intent);
-      handleIntent(intent);
-      if (!embed) {
-          resetNative();
-          startNative();
-      }
+    Log.d("CompyActivity", "onNewIntent() with " + intent);
+    handleIntent(intent);
+    if (!embed) {
+      resetNative();
+      startNative();
+    }
   }
 
-
   protected void handleIntent(Intent intent) {
-      Uri uri = intent.getData();
+    Uri uri = intent.getData();
 
-      if (embed && uri != null) {
-        String scheme = uri.getScheme();
-        String path = uri.getPath();
+    if (embed && uri != null) {
+      String scheme = uri.getScheme();
+      String path = uri.getPath();
 
-        if (scheme.equals("file")) {
-          Log.d("CompyActivity",
-                  "Received file:// intent with path: " + path);
-        } else if (scheme.equals("content")) {
-          Log.d("CompyActivity", "Received content:// intent with path: " + path);
-          try {
-              String filename = "";
-              String[] pathSegments = path.split("/");
-              if (pathSegments.length > 0) {
-                filename = pathSegments[pathSegments.length - 1];
-                String suffix = ".compy";
-                if (filename.endsWith(suffix)) {
-                  // int l = filename.length();
-                  // projectName = filename.substring(0, l - suffix.length());
-                  projectName = filename;
-                }
-              }
-
-              String destination_file = this.getCacheDir().getPath() + "/" + projectName;
-              InputStream data = getContentResolver().openInputStream(uri);
-
-              // copyAssetFile automatically closes the InputStream
-              if (copyAssetFile(data, destination_file)) {
-                projectPath = destination_file;
-              }
-          } catch (Exception e) {
-            Log.d("CompyActivity", "could not read content uri " +
-                  uri.toString() + ": " + e.getMessage());
+      if (scheme.equals("file")) {
+        Log.d("CompyActivity",
+                "Received file:// intent with path: " + path);
+      } else if (scheme.equals("content")) {
+        Log.d("CompyActivity", "Received content:// intent with path: " + path);
+        try {
+          String filename = "";
+          String[] pathSegments = path.split("/");
+          if (pathSegments.length > 0) {
+            filename = pathSegments[pathSegments.length - 1];
+            String suffix = ".compy";
+            if (filename.endsWith(suffix)) {
+              // int l = filename.length();
+              // projectName = filename.substring(0, l - suffix.length());
+              projectName = filename;
+            }
           }
-        } else {
-            Log.e("CompyActivity",
-              "Unsupported scheme: '" + uri.getScheme() +
-                      "'." + "path: " + path);
+          Log.d("CompyActivity",
+            "fn: " + filename + " pn: " + projectName);
+
+          String destination_file = this.getCacheDir().getPath() + "/" + projectName;
+          InputStream data = getContentResolver().openInputStream(uri);
+
+          // copyAssetFile automatically closes the InputStream
+          if (copyAssetFile(data, destination_file)) {
+            projectPath = destination_file;
+          }
+        } catch (Exception e) {
+          Log.d("CompyActivity",
+            "could not read content uri " +
+            uri.toString() + ": " + e.getMessage());
         }
+      } else {
+        Log.e("CompyActivity",
+          "Unsupported scheme: '" + uri.getScheme() +
+                  "'." + "path: " + path);
       }
+    }
   }
 
 }
