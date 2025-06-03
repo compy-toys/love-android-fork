@@ -38,6 +38,7 @@ public class CompyActivity extends GameActivity {
     String appId = BuildConfig.APPLICATION_ID;
     if (appId == "toys.compy.player") {
       flavor = Flavor.PLAYER;
+      isPlayer = true;
     } else if (appId == "toys.compy.?") {
       flavor = Flavor.HARMONY;
     } else {
