@@ -26,11 +26,11 @@ public class CompyActivity extends GameActivity {
   protected String[] getArguments() {
     switch(flavor) {
       case PLAYER:
-        return new String[]{"play", projectName};
+        return new String[]{"compy", "play", projectName};
       case HARMONY:
-        return new String[]{"harmony"};
+        return new String[]{"compy", "harmony"};
       default:
-        return new String[0];
+        return new String[]{"compy"};
     }
   }
 

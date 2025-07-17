@@ -204,7 +204,8 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
     public static NativeState mNextNativeState;
     public static NativeState mCurrentNativeState;
 
-    public static boolean mExitCalledFromJava; // love2d-mod: allow restarting of the native thread
+    // love2d-mod: allow restarting of the native thread
+    public static boolean mExitCalledFromJava;
 
     /** If shared libraries (e.g. SDL or the native application) could not be loaded. */
     public static boolean mBrokenLibraries = true;
@@ -610,7 +611,8 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
            return;
         }
 
-        appQuitFinish(); // love2d-mod: allow restarting of the native thread
+        // love2d-mod: allow restarting of the native thread
+        appQuitFinish();
         super.onDestroy();
     }
 
@@ -618,7 +620,8 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
     public void resetNative() {
         Log.v("SDL", "resetNative()");
 
-        SDLActivity.mExitCalledFromJava = true; // love2d-mod: allow restarting of the native thread
+        // love2d-mod: allow restarting of the native thread
+        SDLActivity.mExitCalledFromJava = true;
 
         appQuitFinish();
     }
