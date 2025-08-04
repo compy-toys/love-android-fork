@@ -315,7 +315,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
         mNextNativeState = NativeState.INIT;
         mCurrentNativeState = NativeState.INIT;
     }
-    
+
     protected SDLSurface createSDLSurface(Context context) {
         return new SDLSurface(context);
     }
@@ -1312,7 +1312,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
             }
 
             mTextEdit.setVisibility(View.VISIBLE);
-            mTextEdit.requestFocus();
+            // mTextEdit.requestFocus();
 
             InputMethodManager imm = (InputMethodManager) SDL.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(mTextEdit, 0);
