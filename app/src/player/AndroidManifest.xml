@@ -9,6 +9,8 @@
       android:name="org.love2d.android.ProjectSelector"
       android:label="${appName}"
       android:exported="true"
+      android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|navigation"
+      android:windowSoftInputMode="stateHidden"
       android:theme="@style/Theme.AppCompat.NoActionBar">
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
