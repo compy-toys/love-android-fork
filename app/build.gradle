@@ -16,9 +16,7 @@ android {
         targetCompatibility = 17
         sourceCompatibility = 17
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
-    }
+
     sourceSets.main {
         java.srcDirs("src/main/java")
         kotlin.srcDirs("src/main/kotlin")
