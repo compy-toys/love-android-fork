@@ -12,12 +12,14 @@ import androidx.core.net.toUri
 import org.love2d.android.executable.BuildConfig
 
 class CompyActivity : GameActivity() {
+  val label = "CompyActivity"
   var isPlayer: Boolean = false
   private enum class Flavor {
     IDE,
     PLAYER,
     HARMONY
   }
+
 
   protected override fun getArguments(): Array<String> {
     return when (flavor) {
@@ -42,7 +44,7 @@ class CompyActivity : GameActivity() {
   @SuppressLint("UseKtx")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Log.d("CompyActivity", "---------- Started")
+    Log.d(label, "---------- Started")
 
     setFlavor()
 
@@ -55,10 +57,8 @@ class CompyActivity : GameActivity() {
         val allFilesPerm = Environment.isExternalStorageManager()
         val requestCode = 2296
         if (!allFilesPerm) {
-          Log.i(
-            "CompyActivity",
-            "All files permission: ${checkCallingOrSelfPermission(Manifest.permission.MANAGE_EXTERNAL_STORAGE)}"
-          )
+          val permRes = checkCallingOrSelfPermission(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+          Log.i(label, "All files permission: ${permRes}")
           try {
             val permsIntent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
             permsIntent.addCategory("android.intent.category.DEFAULT")
@@ -80,6 +80,8 @@ class CompyActivity : GameActivity() {
         startActivity(selectIntent)
       }
     }
+
+    // end onCreate
   }
 
   override fun onDestroy() {
@@ -90,7 +92,7 @@ class CompyActivity : GameActivity() {
   }
 
   override fun onNewIntent(intent: Intent) {
-    Log.d("CompyActivity", "onNewIntent() with $intent")
+    Log.d(label, "onNewIntent() with $intent")
     handleIntent(intent)
     if (!embed) {
       resetNative()
@@ -106,13 +108,15 @@ class CompyActivity : GameActivity() {
       val path = uri.path
 
       if (scheme == "file") {
-        Log.d("CompyActivity", "Received file:// intent with path: $path")
+        Log.d(label, "Received file:// intent with path: $path")
       } else if (scheme == "content") {
-        Log.d("CompyActivity", "Received content:// intent with path: " + path)
+        Log.d(label, "Received content:// intent with path: " + path)
         try {
           var filename = ""
-          val pathSegments =
-                  path!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+          val pathSegments = path!!
+            .split("/".toRegex())
+            .dropLastWhile { it.isEmpty() }
+            .toTypedArray()
           if (pathSegments.isNotEmpty()) {
             filename = pathSegments[pathSegments.size - 1]
             val suffix = ".compy"
@@ -122,7 +126,7 @@ class CompyActivity : GameActivity() {
               projectName = filename
             }
           }
-          Log.d("CompyActivity", "fn: $filename pn: $projectName")
+          Log.d(label, "fn: $filename pn: $projectName")
 
           val destFile = this.cacheDir.path + "/" + projectName
           val data = contentResolver.openInputStream(uri)
@@ -132,10 +136,10 @@ class CompyActivity : GameActivity() {
             projectPath = destFile
           }
         } catch (e: Exception) {
-          Log.d("CompyActivity", "could not read content uri ${uri.toString()}: ${e.message}")
+          Log.d(label, "could not read content uri ${uri.toString()}: ${e.message}")
         }
       } else {
-        Log.e("CompyActivity", "Unsupported scheme: '${uri.scheme}'. path: $path")
+        Log.e(label, "Unsupported scheme: '${uri.scheme}'. path: $path")
       }
     }
   }
