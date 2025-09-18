@@ -1,0 +1,5 @@
+{
+  "search.exclude": {
+    "love/src/jni": true,
+  },
+}
