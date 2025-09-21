@@ -1,71 +1,71 @@
 import java.nio.charset.StandardCharsets
 
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
+  id 'com.android.application'
+  id 'kotlin-android'
 }
 
 android {
-    namespace "org.love2d.android.executable"
-    ndkVersion '25.2.9519653'
+  namespace "org.love2d.android.executable"
+  ndkVersion '25.2.9519653'
 
-    kotlin {
-        jvmToolchain(17)
-    }
-    compileOptions {
-        targetCompatibility = 17
-        sourceCompatibility = 17
-    }
+  kotlin {
+    jvmToolchain(17)
+  }
+  compileOptions {
+    targetCompatibility = 17
+    sourceCompatibility = 17
+  }
 
-    sourceSets.main {
-        java.srcDirs("src/main/java")
-        kotlin.srcDirs("src/main/kotlin")
-    }
-    defaultConfig {
-        applicationId project.properties["app.application_id"]
-        versionCode project.properties["app.version_code"].toInteger()
-        versionName project.properties["app.version_name"]
-        minSdk 19
-        compileSdk 34
-        targetSdk 34
+  sourceSets.main {
+    java.srcDirs("src/main/java")
+    kotlin.srcDirs("src/main/kotlin")
+  }
+  defaultConfig {
+    applicationId project.properties["app.application_id"]
+    versionCode project.properties["app.version_code"].toInteger()
+    versionName project.properties["app.version_name"]
+    minSdk 19
+    compileSdk 34
+    targetSdk 34
 
-        manifestPlaceholders = [
-            ORIENTATION:project.properties["app.orientation"],
-        ]
+    manifestPlaceholders = [
+      ORIENTATION: project.properties["app.orientation"],
+    ]
+  }
+  buildTypes {
+    release {
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+  }
+  flavorDimensions = ['mode', 'compy']
+  productFlavors {
+    IDE {
+      dimension 'compy'
+      applicationIdSuffix ".ide"
+      manifestPlaceholders = [appName: "Compy IDE"]
     }
-    flavorDimensions = ['mode', 'compy']
-    productFlavors {
-        IDE {
-            dimension 'compy'
-            applicationIdSuffix ".ide"
-            manifestPlaceholders = [appName: "Compy IDE"]
-        }
-        player {
-            dimension 'compy'
-            applicationIdSuffix ".player"
-            manifestPlaceholders = [appName: "Compy Player"]
-        }
-        embed {
-            dimension 'mode'
-        }
+    player {
+      dimension 'compy'
+      applicationIdSuffix ".player"
+      manifestPlaceholders = [appName: "Compy Player"]
     }
-    lint {
-        abortOnError false
+    embed {
+      dimension 'mode'
     }
+  }
+  lint {
+    abortOnError false
+  }
   buildFeatures {
     buildConfig true
   }
 }
 
 dependencies {
-    api 'androidx.multidex:multidex:2.0.1'
-    api fileTree(dir: 'libs', include: ['*.jar'])
-    api 'androidx.appcompat:appcompat:1.6.1'
-    api project(':love')
+  api 'androidx.multidex:multidex:2.0.1'
+  api fileTree(dir: 'libs', include: ['*.jar'])
+  api 'androidx.appcompat:appcompat:1.6.1'
+  api project(':love')
 }
