@@ -15,6 +15,9 @@ android {
   kotlin {
     jvmToolchain(17)
   }
+  kotlinOptions {
+    freeCompilerArgs = ['-Xstring-concat=inline']
+  }
   compileOptions {
     targetCompatibility = 17
     sourceCompatibility = 17
