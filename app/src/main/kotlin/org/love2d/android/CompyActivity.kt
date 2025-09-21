@@ -23,9 +23,9 @@ class CompyActivity : GameActivity() {
 
   protected override fun getArguments(): Array<String> {
     return when (flavor) {
-      Flavor.PLAYER  -> arrayOf("compy", "play", projectName)
+      Flavor.IDE -> arrayOf("compy")
+      Flavor.PLAYER -> arrayOf("compy", "play", projectName)
       Flavor.HARMONY -> arrayOf("compy", "harmony")
-      else           -> arrayOf("compy")
     }
   }
 
@@ -44,7 +44,7 @@ class CompyActivity : GameActivity() {
   @SuppressLint("UseKtx")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Log.d(label, "---------- Started")
+    Log.d(label, "Started")
 
     setFlavor()
 
@@ -52,33 +52,38 @@ class CompyActivity : GameActivity() {
     handleIntent(intent)
     intent.setData(null)
 
-    if (flavor == Flavor.IDE) {
-      if (Build.VERSION.SDK_INT >= 30) {
-        val allFilesPerm = Environment.isExternalStorageManager()
-        val requestCode = 2296
-        if (!allFilesPerm) {
-          val permRes = checkCallingOrSelfPermission(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-          Log.i(label, "All files permission: ${permRes}")
-          try {
-            val permsIntent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-            permsIntent.addCategory("android.intent.category.DEFAULT")
-            permsIntent.setData("package:${applicationContext.packageName}".toUri())
-            startActivityForResult(permsIntent, requestCode)
-          } catch (e: Exception) {
-            val permsIntent = Intent()
-            permsIntent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
-            startActivityForResult(permsIntent, requestCode)
+    // if (flavor == Flavor.IDE)
+    when (flavor) {
+      Flavor.IDE -> {
+        if (Build.VERSION.SDK_INT >= 30) {
+          val allFilesPerm = Environment.isExternalStorageManager()
+          val requestCode = 2296
+          if (!allFilesPerm) {
+            val permRes = checkCallingOrSelfPermission(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+            Log.i(label, "All files permission: ${permRes}")
+            try {
+              val permsIntent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+              permsIntent.addCategory("android.intent.category.DEFAULT")
+              permsIntent.setData("package:${applicationContext.packageName}".toUri())
+              startActivityForResult(permsIntent, requestCode)
+            } catch (e: Exception) {
+              val permsIntent = Intent()
+              permsIntent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+              startActivityForResult(permsIntent, requestCode)
+            }
           }
         }
       }
-    }
 
-    if (flavor == Flavor.PLAYER) {
-      if (projectPath.isEmpty()) {
-        Log.d("CompyActivity", "No project selected, launching Selector intent")
-        val selectIntent = Intent(this, ProjectSelector::class.java)
-        startActivity(selectIntent)
+      Flavor.PLAYER -> {
+        if (projectPath.isEmpty()) {
+          Log.d("CompyActivity", "No project selected, launching Selector intent")
+          val selectIntent = Intent(this, ProjectSelector::class.java)
+          startActivity(selectIntent)
+        }
       }
+
+      Flavor.HARMONY -> {}
     }
 
     // end onCreate
@@ -110,7 +115,7 @@ class CompyActivity : GameActivity() {
       if (scheme == "file") {
         Log.d(label, "Received file:// intent with path: $path")
       } else if (scheme == "content") {
-        Log.d(label, "Received content:// intent with path: " + path)
+        Log.d(label, "Received content:// intent with path: $path")
         try {
           var filename = ""
           val pathSegments = path!!
@@ -131,9 +136,11 @@ class CompyActivity : GameActivity() {
           val destFile = this.cacheDir.path + "/" + projectName
           val data = contentResolver.openInputStream(uri)
 
-          // copyAssetFile automatically closes the InputStream
-          if (copyAssetFile(data, destFile)) {
-            projectPath = destFile
+          data?.let { d ->
+            // copyAssetFile automatically closes the InputStream
+            if (copyAssetFile(d, destFile)) {
+              projectPath = destFile
+            }
           }
         } catch (e: Exception) {
           Log.d(label, "could not read content uri ${uri.toString()}: ${e.message}")
