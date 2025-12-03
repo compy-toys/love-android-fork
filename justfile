@@ -116,7 +116,7 @@ startlog flavor: (start flavor) logtail
 
 zip-apps:
     7z a /tmp/apk_{{timestamp}} app/build/outputs/apk/embed*/debug/*.apk
-    ls -lh /tmp/apk_{{timestamp}}
+    ls -lh /tmp/apk_{{timestamp}}*
 
 pm-ls:
     @{{ADB}} shell pm list packages | grep '.' | cut -d ':' -f 2
