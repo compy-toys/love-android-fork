@@ -60,7 +60,7 @@ class CompyActivity : GameActivity() {
           val requestCode = 2296
           if (!allFilesPerm) {
             val permRes = checkCallingOrSelfPermission(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-            Log.i(label, "All files permission: ${permRes}")
+            Log.i(label, "All files permission: $permRes")
             try {
               val permsIntent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
               permsIntent.addCategory("android.intent.category.DEFAULT")
@@ -77,7 +77,7 @@ class CompyActivity : GameActivity() {
 
       Flavor.PLAYER -> {
         if (projectPath.isEmpty()) {
-          Log.d("CompyActivity", "No project selected, launching Selector intent")
+          Log.d(label, "No project selected, launching Selector intent")
           val selectIntent = Intent(this, ProjectSelector::class.java)
           startActivity(selectIntent)
         }
@@ -90,6 +90,7 @@ class CompyActivity : GameActivity() {
   }
 
   override fun onDestroy() {
+    Log.d(label, "onDestroy")
     if (isPlayer) {
       projectPath = ""
     }
